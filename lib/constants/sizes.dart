@@ -1,0 +1,33 @@
+class Sizes {
+  static const d1 = 1.0;
+  static const d2 = 2.0;
+  static const d3 = 3.0;
+  static const d4 = 4.0;
+  static const d5 = 5.0;
+  static const d6 = 6.0;
+  static const d7 = 7.0;
+  static const d8 = 8.0;
+  static const d9 = 9.0;
+  static const d10 = 10.0;
+  static const d11 = 11.0;
+  static const d12 = 12.0;
+  static const d14 = 14.0;
+  static const d16 = 16.0;
+  static const d18 = 18.0;
+  static const d20 = 20.0;
+  static const d24 = 24.0;
+  static const d28 = 28.0;
+  static const d32 = 32.0;
+  static const d36 = 36.0;
+  static const d40 = 40.0;
+  static const d44 = 44.0;
+  static const d48 = 48.0;
+  static const d52 = 52.0;
+  static const d56 = 56.0;
+  static const d60 = 60.0;
+  static const d64 = 64.0;
+  static const d72 = 72.0;
+  static const d80 = 80.0;
+  static const d96 = 96.0;
+  static const d100 = 100.0;
+}
