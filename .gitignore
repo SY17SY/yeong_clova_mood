@@ -43,3 +43,22 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase configuration files (contain API keys)
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
+firebase.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Firebase hosting cache
+.firebase/
+**/firebase-debug.log
+
+# Firebase functions
+functions/node_modules/
+functions/lib/
