@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
 import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
 import 'package:yeong_clova_mood/repos/f_post_repo.dart';
@@ -31,7 +32,7 @@ class PostViewModel extends StreamNotifier<List<PostModel>> {
     state = await AsyncValue.guard(() async {
       final postId = _repository.generatePostId();
 
-      final thumbUrl = files != null
+      final thumbUrl = files != null && files.isNotEmpty
           ? await _repository.uploadPost(
               file: files[0],
               uid: uid,
@@ -68,6 +69,7 @@ class PostViewModel extends StreamNotifier<List<PostModel>> {
       showFirebaseErrorSnack(context, state.error);
     } else {
       ref.read(postUploadProvider.notifier).resetAll();
+      context.pop();
     }
   }
 
@@ -108,9 +110,9 @@ class PostUploadViewModel extends StateNotifier<PostUploadState> {
           PostUploadState(
             mood: null,
             files: [],
-            createdAt: DateTime.now().subtract(
-              Duration(minutes: DateTime.now().minute % 10),
-            ),
+            createdAt: DateTime.now().subtract(Duration(
+              minutes: DateTime.now().minute % 10,
+            )),
           ),
         );
 
@@ -142,9 +144,9 @@ class PostUploadViewModel extends StateNotifier<PostUploadState> {
   }
 
   void updateCreatedAt(DateTime dateTime) {
-    final newDateTime = dateTime.subtract(
-      Duration(minutes: dateTime.minute % 10),
-    );
+    final newDateTime = dateTime.subtract(Duration(
+      minutes: dateTime.minute % 10,
+    ));
     state = state.copyWith(createdAt: newDateTime);
   }
 
@@ -158,9 +160,9 @@ class PostUploadViewModel extends StateNotifier<PostUploadState> {
     state = PostUploadState(
       mood: null,
       files: [],
-      createdAt: DateTime.now().subtract(
-        Duration(minutes: DateTime.now().minute % 10),
-      ),
+      createdAt: DateTime.now().subtract(Duration(
+        minutes: DateTime.now().minute % 10,
+      )),
     );
   }
 }

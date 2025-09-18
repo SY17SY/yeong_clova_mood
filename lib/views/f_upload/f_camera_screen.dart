@@ -23,11 +23,16 @@ class _CameraScreenState extends State<CameraScreen>
 
   bool _hasPermission = false;
   bool _isSelfieMode = false;
+  bool _noCamera = false;
 
   Future<void> _initCamera() async {
     final cameras = await availableCameras();
 
-    if (cameras.isEmpty) return;
+    if (cameras.isEmpty) {
+      _noCamera = true;
+      setState(() {});
+      return;
+    }
 
     _cameraController = CameraController(
       cameras[_isSelfieMode ? 1 : 0],
@@ -107,7 +112,9 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    if (!_noCamera && _hasPermission) {
+      _cameraController.dispose();
+    }
     _tabController.dispose();
     super.dispose();
   }
@@ -123,74 +130,90 @@ class _CameraScreenState extends State<CameraScreen>
         physics: NeverScrollableScrollPhysics(),
         children: [
           Center(
-            child: _hasPermission && _cameraController.value.isInitialized
-                ? Stack(
+            child: _noCamera
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Positioned.fill(
-                        child: CameraPreview(_cameraController),
+                      Icon(
+                        Icons.camera_alt_outlined,
+                        color: Colors.white,
+                        size: Sizes.d60,
                       ),
-                      Positioned(
-                        top: Sizes.d60,
-                        left: Sizes.d24,
-                        child: IconButton(
-                          color: Colors.white,
-                          onPressed: _onPopPressed,
-                          icon: FaIcon(FontAwesomeIcons.chevronLeft),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: Sizes.d40,
-                        left: 0,
-                        right: 0,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: IconButton(
-                                  onPressed: () => _setFlashMode(_flashMode),
-                                  icon: Icon(
-                                    _flashMode == FlashMode.auto
-                                        ? Icons.flash_auto_rounded
-                                        : _flashMode == FlashMode.always
-                                            ? Icons.flash_on_rounded
-                                            : _flashMode == FlashMode.torch
-                                                ? Icons.flashlight_on_rounded
-                                                : Icons.flash_off_rounded,
-                                    color: Colors.white,
-                                    size: Sizes.d24,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: _takePicture,
-                              child: Container(
-                                width: Sizes.d60,
-                                height: Sizes.d60,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: IconButton(
-                                  onPressed: _toggleSelfieMode,
-                                  icon: Icon(
-                                    Icons.cameraswitch_rounded,
-                                    color: Colors.white,
-                                    size: Sizes.d24,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      SizedBox(height: Sizes.d16),
+                      Text(
+                        "No camera available",
+                        style: TextStyle(color: Colors.white),
                       ),
                     ],
                   )
-                : CircularProgressIndicator.adaptive(),
+                : _hasPermission && _cameraController.value.isInitialized
+                    ? Stack(
+                        children: [
+                          Positioned.fill(
+                            child: CameraPreview(_cameraController),
+                          ),
+                          Positioned(
+                            top: Sizes.d60,
+                            left: Sizes.d24,
+                            child: IconButton(
+                              color: Colors.white,
+                              onPressed: _onPopPressed,
+                              icon: FaIcon(FontAwesomeIcons.chevronLeft),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: Sizes.d40,
+                            left: 0,
+                            right: 0,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Center(
+                                    child: IconButton(
+                                      onPressed: () => _setFlashMode(_flashMode),
+                                      icon: Icon(
+                                        _flashMode == FlashMode.auto
+                                            ? Icons.flash_auto_rounded
+                                            : _flashMode == FlashMode.always
+                                                ? Icons.flash_on_rounded
+                                                : _flashMode == FlashMode.torch
+                                                    ? Icons.flashlight_on_rounded
+                                                    : Icons.flash_off_rounded,
+                                        color: Colors.white,
+                                        size: Sizes.d24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: _takePicture,
+                                  child: Container(
+                                    width: Sizes.d60,
+                                    height: Sizes.d60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: IconButton(
+                                      onPressed: _toggleSelfieMode,
+                                      icon: Icon(
+                                        Icons.cameraswitch_rounded,
+                                        color: Colors.white,
+                                        size: Sizes.d24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    : CircularProgressIndicator.adaptive(),
           ),
           Builder(
             builder: (context) {

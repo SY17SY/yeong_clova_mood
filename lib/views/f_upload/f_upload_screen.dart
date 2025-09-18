@@ -160,12 +160,25 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
           ),
           leadingWidth: Sizes.d100,
           actions: [
-            IconButton(
-              onPressed: _onSubmitTap,
-              icon: FaIcon(
-                FontAwesomeIcons.check,
-                color: AppColors.neutral500,
-              ),
+            Consumer(
+              builder: (context, ref, child) {
+                final isLoading = ref.watch(postProvider).isLoading;
+                return IconButton(
+                  onPressed: isLoading ? null : _onSubmitTap,
+                  icon: isLoading
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator.adaptive(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : FaIcon(
+                          FontAwesomeIcons.check,
+                          color: AppColors.neutral500,
+                        ),
+                );
+              },
             ),
           ],
         ),

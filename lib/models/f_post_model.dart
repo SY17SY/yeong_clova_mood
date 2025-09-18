@@ -33,8 +33,9 @@ class PostModel {
         title = json["title"],
         mood = json["mood"],
         content = json["content"],
-        thumbUrl = json["thumbUrl"],
-        imgUrls = json["imgUrls"],
+        thumbUrl = json["thumbUrl"] as String?,
+        imgUrls =
+            json["imgUrls"] != null ? List<String>.from(json["imgUrls"]) : null,
         clovas = json["clovas"],
         comments = json["comments"],
         isPrivate = json["isPrivate"],
@@ -51,7 +52,7 @@ class PostModel {
       'clovas': clovas,
       'comments': comments,
       'isPrivate': isPrivate,
-      'createdAt': FieldValue.serverTimestamp(),
+      'createdAt': createdAt,
     };
   }
 }

@@ -5,9 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yeong_clova_mood/constants/colors.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/firebase_options.dart';
-import 'package:yeong_clova_mood/repos/settings_repo.dart';
+import 'package:yeong_clova_mood/repos/g_settings_repo.dart';
 import 'package:yeong_clova_mood/router.dart';
-import 'package:yeong_clova_mood/view_models/settings_vm.dart';
+import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,13 +32,14 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider.notifier);
+    ref.watch(settingsProvider); // 상태 변경을 감지하기 위해 watch
+    final settingsNotifier = ref.read(settingsProvider.notifier);
 
     return MaterialApp.router(
       title: 'Yeong Mood Tracker',
       routerConfig: ref.watch(routerProvider),
       debugShowCheckedModeBanner: false,
-      themeMode: settings.themeMode,
+      themeMode: settingsNotifier.themeMode,
       theme: ThemeData(
         useMaterial3: false,
         primaryColor: AppColors.primary,

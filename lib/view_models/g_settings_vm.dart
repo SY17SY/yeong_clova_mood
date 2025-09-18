@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yeong_clova_mood/models/settings_model.dart';
-import 'package:yeong_clova_mood/repos/settings_repo.dart';
+import 'package:yeong_clova_mood/models/g_settings_model.dart';
+import 'package:yeong_clova_mood/repos/g_settings_repo.dart';
 
-class SettingsViewModel extends Notifier<SettingsModel> {
+class SettingsViewModel extends StateNotifier<SettingsModel> {
   final SettingsRepository _repository;
 
-  SettingsViewModel(this._repository);
+  SettingsViewModel(this._repository)
+      : super(SettingsModel(
+          darkMode: _repository.isDarkMode(),
+          followSystem: _repository.isFollowSystem(),
+        ));
 
   void setThemeMode({required bool followSystem, required bool darkMode}) {
     _repository.setFollowSystem(followSystem);
@@ -30,16 +34,9 @@ class SettingsViewModel extends Notifier<SettingsModel> {
     }
     return state.darkMode;
   }
-
-  @override
-  SettingsModel build() {
-    return SettingsModel(
-      darkMode: _repository.isDarkMode(),
-      followSystem: _repository.isFollowSystem(),
-    );
-  }
 }
 
-final settingsProvider = NotifierProvider<SettingsViewModel, SettingsModel>(
-  () => throw UnimplementedError(),
+final settingsProvider =
+    StateNotifierProvider<SettingsViewModel, SettingsModel>(
+  (ref) => throw UnimplementedError(),
 );

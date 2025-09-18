@@ -7,6 +7,7 @@ import 'package:yeong_clova_mood/views/abc_authentication/b0_sign_up_screen.dart
 import 'package:yeong_clova_mood/views/abc_authentication/c_login_screen.dart';
 import 'package:yeong_clova_mood/views/d_common/d_main_navigation_screen.dart';
 import 'package:yeong_clova_mood/views/f_upload/f_upload_screen.dart';
+import 'package:yeong_clova_mood/views/g_setting_screen.dart';
 
 final routerProvider = Provider(
   (ref) => GoRouter(
@@ -103,6 +104,11 @@ final routerProvider = Provider(
             },
           );
         },
+      ),
+      GoRoute(
+        name: SettingScreen.routeName,
+        path: SettingScreen.routeUrl,
+        builder: (context, state) => SettingScreen(),
       ),
     ],
   ),
