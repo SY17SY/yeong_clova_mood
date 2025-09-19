@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
-import 'package:yeong_clova_mood/view_models/f_post_vm.dart';
+import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
 
 class PostMenu extends ConsumerWidget {
   final PostModel post;
@@ -28,7 +28,7 @@ class PostMenu extends ConsumerWidget {
             onPressed: () async {
               context.pop();
               context.pop();
-              await ref.read(postProvider.notifier).deletePost(post.id);
+              await ref.read(myProvider.notifier).deletePost(post.id);
             },
             child: Text("예"),
           ),
@@ -67,7 +67,7 @@ class PostMenu extends ConsumerWidget {
                     behavior: HitTestBehavior.opaque,
                     child: Padding(
                       padding: const EdgeInsets.all(Sizes.d24),
-                      child: TtitleSmall16("Delete", color: Colors.red),
+                      child: TtitleSmall16("삭제", color: Colors.red),
                     ),
                   ),
                 ],

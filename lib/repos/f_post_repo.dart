@@ -39,29 +39,6 @@ class PostRepository {
         .map((doc) => PostModel.fromJson(doc.data(), postId: doc.id))
         .toList());
   }
-
-  Future<void> deletePostFiles({
-    required String uid,
-    required String postId,
-  }) async {
-    try {
-      final ref = _storage.ref().child("/posts/$uid/$postId/");
-      final ListResult result = await ref.listAll();
-      for (Reference fileRef in result.items) {
-        await fileRef.delete();
-      }
-    } catch (e) {
-      print('Error deleting post files: $e');
-    }
-  }
-
-  Future<void> deletePost(String postId) async {
-    try {
-      await _db.collection("posts").doc(postId).delete();
-    } catch (e) {
-      print(e);
-    }
-  }
 }
 
 final postRepository = Provider((ref) => PostRepository());

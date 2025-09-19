@@ -20,7 +20,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        settingsProvider.overrideWith(() => SettingsViewModel(repository))
+        settingsProvider.overrideWith((ref) => SettingsViewModel(repository))
       ],
       child: const MyApp(),
     ),
@@ -32,7 +32,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(settingsProvider); // 상태 변경을 감지하기 위해 watch
+    ref.watch(settingsProvider);
     final settingsNotifier = ref.read(settingsProvider.notifier);
 
     return MaterialApp.router(
@@ -60,7 +60,7 @@ class MyApp extends ConsumerWidget {
           foregroundColor: AppColors.textPrimaryLight,
           elevation: 0,
         ),
-        bottomAppBarTheme: BottomAppBarTheme(
+        bottomAppBarTheme: BottomAppBarThemeData(
           color: AppColors.neutral100,
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -71,7 +71,7 @@ class MyApp extends ConsumerWidget {
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
         ),
-        tabBarTheme: TabBarTheme(
+        tabBarTheme: TabBarThemeData(
           labelStyle: Theme.of(context).textTheme.titleSmall,
           unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
           unselectedLabelColor: AppColors.neutral500,
@@ -141,7 +141,7 @@ class MyApp extends ConsumerWidget {
           foregroundColor: AppColors.textPrimaryDark,
           elevation: 0,
         ),
-        bottomAppBarTheme: BottomAppBarTheme(
+        bottomAppBarTheme: BottomAppBarThemeData(
           color: AppColors.neutral800,
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -152,7 +152,7 @@ class MyApp extends ConsumerWidget {
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
         ),
-        tabBarTheme: TabBarTheme(
+        tabBarTheme: TabBarThemeData(
           labelStyle: Theme.of(context).textTheme.titleSmall,
           unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
           unselectedLabelColor: AppColors.neutral500,

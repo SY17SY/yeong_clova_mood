@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yeong_clova_mood/constants/colors.dart';
-import 'package:yeong_clova_mood/constants/constants.dart';
 import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
-import 'package:yeong_clova_mood/constants/text.dart';
-import 'package:yeong_clova_mood/view_models/f_post_vm.dart';
+import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
 import 'package:yeong_clova_mood/views/g_setting_screen.dart';
+import 'package:yeong_clova_mood/widgets/horiz_date.dart';
 import 'package:yeong_clova_mood/widgets/post.dart';
+import 'package:yeong_clova_mood/widgets/vertical_date.dart';
 
 class MyScreen extends ConsumerStatefulWidget {
   static const routeName = "mine";
@@ -22,18 +22,10 @@ class MyScreen extends ConsumerStatefulWidget {
 }
 
 class _MyScreenState extends ConsumerState<MyScreen> {
-  DateTime? _selectedDate;
-
   void _onSearchTap() {}
 
   void _onSettingTap() {
     context.push(SettingScreen.routeUrl);
-  }
-
-  void _onDateSelected(DateTime date) {
-    setState(() {
-      _selectedDate = date;
-    });
   }
 
   @override
@@ -41,73 +33,7 @@ class _MyScreenState extends ConsumerState<MyScreen> {
     return Scaffold(
       body: Row(
         children: [
-          Container(
-            width: 80,
-            decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: AppColors.neutral300,
-                  width: 0.5,
-                ),
-              ),
-            ),
-            child: ListView.builder(
-              padding: EdgeInsets.only(
-                top: Sizes.d72,
-              ),
-              itemCount: 30,
-              itemBuilder: (context, index) {
-                final date = DateTime.now().subtract(Duration(days: index));
-                final isToday = index == 0;
-                final isSelected = _selectedDate != null &&
-                    _selectedDate!.year == date.year &&
-                    _selectedDate!.month == date.month &&
-                    _selectedDate!.day == date.day;
-                return GestureDetector(
-                  onTap: () => _onDateSelected(date),
-                  child: Container(
-                    height: 80,
-                    margin: EdgeInsets.only(bottom: Sizes.d8),
-                    decoration: BoxDecoration(
-                      color: (isSelected || isToday)
-                          ? AppColors.primary.withValues(alpha: 0.1)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(Sizes.d8),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TbodySmall14(
-                          "${date.month}/${date.day}",
-                          color: (isSelected || isToday)
-                              ? AppColors.primary
-                              : AppColors.neutral500,
-                        ),
-                        Gaps.v4,
-                        TlabelSmall12(
-                          weekdays[date.weekday % 7],
-                          color: (isSelected || isToday)
-                              ? AppColors.primary
-                              : AppColors.neutral400,
-                        ),
-                        Gaps.v8,
-                        Container(
-                          width: 40,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: (isSelected || isToday)
-                                ? AppColors.primary
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          VerticalDate(),
           Expanded(
             child: CustomScrollView(
               slivers: [
@@ -130,11 +56,18 @@ class _MyScreenState extends ConsumerState<MyScreen> {
                     ),
                     Gaps.h16,
                   ],
+                  bottom: PreferredSize(
+                    preferredSize: Size(
+                      MediaQuery.of(context).size.width,
+                      Sizes.d80,
+                    ),
+                    child: HorizDate(),
+                  ),
                 ),
-                ref.watch(postProvider).when(
+                ref.watch(mySelectedDatePostsProvider).when(
                       loading: () => SliverToBoxAdapter(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator.adaptive(),
                         ),
                       ),
                       error: (error, stackTrace) => SliverToBoxAdapter(
@@ -142,12 +75,28 @@ class _MyScreenState extends ConsumerState<MyScreen> {
                           child: Text("error: ${error.toString()}"),
                         ),
                       ),
-                      data: (data) {
+                      data: (posts) {
+                        if (posts.isEmpty) {
+                          return SliverToBoxAdapter(
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(Sizes.d40),
+                                child: Text(
+                                  "선택한 날짜에 포스트가 없습니다",
+                                  style: TextStyle(
+                                    color: AppColors.neutral400,
+                                    fontSize: Sizes.d16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
                         return SliverList.separated(
-                          itemCount: data.length,
+                          itemCount: posts.length,
                           itemBuilder: (context, index) => Post(
-                            key: ValueKey(data[index].id),
-                            post: data[index],
+                            key: ValueKey(posts[index].id),
+                            post: posts[index],
                           ),
                           separatorBuilder: (context, index) => Padding(
                             padding: EdgeInsets.symmetric(

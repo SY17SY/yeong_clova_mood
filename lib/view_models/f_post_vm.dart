@@ -65,18 +65,13 @@ class PostViewModel extends StreamNotifier<List<PostModel>> {
       return [post];
     });
 
+    if (!context.mounted) return;
     if (state.hasError) {
       showFirebaseErrorSnack(context, state.error);
     } else {
       ref.read(postUploadProvider.notifier).resetAll();
       context.pop();
     }
-  }
-
-  Future<void> deletePost(String postId) async {
-    final uid = ref.read(authRepository).user!.uid;
-    await _repository.deletePost(postId);
-    await _repository.deletePostFiles(uid: uid, postId: postId);
   }
 }
 

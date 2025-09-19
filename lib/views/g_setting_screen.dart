@@ -115,50 +115,52 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             child: Column(
               children: [
-                RadioListTile<ThemeMode>(
-                  value: ThemeMode.system,
+                RadioGroup<ThemeMode>(
                   groupValue: currentThemeMode,
                   onChanged: _onThemeChanged,
-                  title: TbodyMedium16("시스템 설정"),
-                  subtitle: TbodySmall14(
-                    "기기의 테마 설정을 따릅니다",
-                    color: AppColors.neutral500,
+                  child: Column(
+                    children: [
+                      RadioListTile<ThemeMode>(
+                        value: ThemeMode.system,
+                        title: TbodyMedium16("시스템 설정"),
+                        subtitle: TbodySmall14(
+                          "기기의 테마 설정을 따릅니다",
+                          color: AppColors.neutral500,
+                        ),
+                        activeColor: AppColors.primary,
+                      ),
+                      Divider(
+                        height: 1,
+                        color: AppColors.neutral200,
+                        indent: Sizes.d16,
+                        endIndent: Sizes.d16,
+                      ),
+                      RadioListTile<ThemeMode>(
+                        value: ThemeMode.light,
+                        title: TbodyMedium16("라이트 모드"),
+                        subtitle: TbodySmall14(
+                          "밝은 테마를 사용합니다",
+                          color: AppColors.neutral500,
+                        ),
+                        activeColor: AppColors.primary,
+                      ),
+                      Divider(
+                        height: 1,
+                        color: AppColors.neutral200,
+                        indent: Sizes.d16,
+                        endIndent: Sizes.d16,
+                      ),
+                      RadioListTile<ThemeMode>(
+                        value: ThemeMode.dark,
+                        title: TbodyMedium16("다크 모드"),
+                        subtitle: TbodySmall14(
+                          "어두운 테마를 사용합니다",
+                          color: AppColors.neutral500,
+                        ),
+                        activeColor: AppColors.primary,
+                      ),
+                    ],
                   ),
-                  activeColor: AppColors.primary,
-                ),
-                Divider(
-                  height: 1,
-                  color: AppColors.neutral200,
-                  indent: Sizes.d16,
-                  endIndent: Sizes.d16,
-                ),
-                RadioListTile<ThemeMode>(
-                  value: ThemeMode.light,
-                  groupValue: currentThemeMode,
-                  onChanged: _onThemeChanged,
-                  title: TbodyMedium16("라이트 모드"),
-                  subtitle: TbodySmall14(
-                    "밝은 테마를 사용합니다",
-                    color: AppColors.neutral500,
-                  ),
-                  activeColor: AppColors.primary,
-                ),
-                Divider(
-                  height: 1,
-                  color: AppColors.neutral200,
-                  indent: Sizes.d16,
-                  endIndent: Sizes.d16,
-                ),
-                RadioListTile<ThemeMode>(
-                  value: ThemeMode.dark,
-                  groupValue: currentThemeMode,
-                  onChanged: _onThemeChanged,
-                  title: TbodyMedium16("다크 모드"),
-                  subtitle: TbodySmall14(
-                    "어두운 테마를 사용합니다",
-                    color: AppColors.neutral500,
-                  ),
-                  activeColor: AppColors.primary,
                 ),
               ],
             ),

@@ -1,0 +1,91 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yeong_clova_mood/models/f_post_model.dart';
+import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
+
+class MyRepository {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final Ref _ref;
+
+  MyRepository(this._ref);
+
+  String? get _currentUserId => _ref.read(authRepository).user?.uid;
+
+  Stream<List<PostModel>> getMyTodayPosts() {
+    if (_currentUserId == null) return Stream.value([]);
+
+    final today = DateTime.now();
+    final startOfDay = DateTime(today.year, today.month, today.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    final query = _db
+        .collection("posts")
+        .orderBy("createdAt", descending: true)
+        .snapshots();
+
+    return query.map((event) => event.docs
+        .map((doc) => PostModel.fromJson(doc.data(), postId: doc.id))
+        .toList());
+  }
+
+  Stream<List<PostModel>> getMySelectedDatePosts(DateTime selectedDate) {
+    if (_currentUserId == null) return Stream.value([]);
+
+    final startOfDay =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    final query = _db
+        .collection("posts")
+        .orderBy("createdAt", descending: true)
+        .snapshots();
+
+    return query.map((event) => event.docs
+        .map((doc) => PostModel.fromJson(doc.data(), postId: doc.id))
+        .toList());
+  }
+
+  Future<void> deletePost(String postId) async {
+    if (_currentUserId == null) throw Exception("User not authenticated");
+
+    try {
+      final postDoc = await _db.collection("posts").doc(postId).get();
+      if (!postDoc.exists) {
+        throw Exception("Post not found");
+      }
+
+      final postData = postDoc.data()!;
+      if (postData["uid"] != _currentUserId) {
+        throw Exception("Unauthorized: Cannot delete another user's post");
+      }
+
+      await _db.collection("posts").doc(postId).delete();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deletePostFiles({
+    required String uid,
+    required String postId,
+  }) async {
+    if (_currentUserId == null) throw Exception("User not authenticated");
+    if (uid != _currentUserId) {
+      throw Exception("Unauthorized: Cannot delete another user's files");
+    }
+
+    try {
+      final ref = _storage.ref().child("/posts/$uid/$postId/");
+      final ListResult result = await ref.listAll();
+      for (Reference fileRef in result.items) {
+        await fileRef.delete();
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
+
+final myRepository = Provider((ref) => MyRepository(ref));
