@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
-import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
-import 'package:yeong_clova_mood/views/e_my_screen.dart';
+import 'package:yeong_clova_mood/views/e_my/e_my_screen.dart';
 import 'package:yeong_clova_mood/views/f_upload/f_upload_screen.dart';
-import 'package:yeong_clova_mood/views/f_your_screen.dart';
+import 'package:yeong_clova_mood/views/g_your/g_your_screen.dart';
 import 'package:yeong_clova_mood/widgets/nav_tab.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
@@ -26,9 +25,6 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
   late int _selectedIndex = _tabs.indexOf(widget.tab);
 
   void _onTap(int index) async {
-    if (index == 2) {
-      ref.read(authRepository).logOut();
-    }
     context.go("/${_tabs[index]}");
     setState(() {
       _selectedIndex = index;

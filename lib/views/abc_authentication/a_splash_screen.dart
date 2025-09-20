@@ -5,7 +5,7 @@ import 'package:yeong_clova_mood/constants/colors.dart';
 import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
-import 'package:yeong_clova_mood/views/e_my_screen.dart';
+import 'package:yeong_clova_mood/views/e_my/e_my_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   static const routeName = "splash";

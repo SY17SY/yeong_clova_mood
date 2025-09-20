@@ -5,7 +5,7 @@ import 'package:yeong_clova_mood/constants/constants.dart';
 import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/view_models/f_post_vm.dart';
-import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
+import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 
 class MoodButtons extends ConsumerStatefulWidget {
   const MoodButtons({super.key});

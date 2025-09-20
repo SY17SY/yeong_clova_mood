@@ -5,9 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yeong_clova_mood/constants/colors.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/firebase_options.dart';
-import 'package:yeong_clova_mood/repos/g_settings_repo.dart';
+import 'package:yeong_clova_mood/repos/h_settings_repo.dart';
 import 'package:yeong_clova_mood/router.dart';
-import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
+import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

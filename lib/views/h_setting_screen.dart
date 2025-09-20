@@ -8,7 +8,7 @@ import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
-import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
+import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 import 'package:yeong_clova_mood/views/abc_authentication/b0_sign_up_screen.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {

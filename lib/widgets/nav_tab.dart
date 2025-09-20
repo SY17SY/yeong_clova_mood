@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
-import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
+import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 
 class NavTab extends ConsumerWidget {
   final String svgPath;

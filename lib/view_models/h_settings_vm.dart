@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yeong_clova_mood/models/g_settings_model.dart';
-import 'package:yeong_clova_mood/repos/g_settings_repo.dart';
+import 'package:yeong_clova_mood/repos/h_settings_repo.dart';
 
 class SettingsViewModel extends StateNotifier<SettingsModel> {
   final SettingsRepository _repository;

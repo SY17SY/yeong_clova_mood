@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
 import 'package:yeong_clova_mood/utils.dart';
 import 'package:yeong_clova_mood/view_models/a_user_vm.dart';
-import 'package:yeong_clova_mood/views/e_my_screen.dart';
+import 'package:yeong_clova_mood/views/e_my/e_my_screen.dart';
 
 class SignUpFormState {
   final Map<String, String> formData;

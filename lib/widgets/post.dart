@@ -10,7 +10,7 @@ import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
 import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
 import 'package:yeong_clova_mood/utils.dart';
-import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
+import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 import 'package:yeong_clova_mood/widgets/my_post_menu.dart';
 
 class Post extends ConsumerStatefulWidget {

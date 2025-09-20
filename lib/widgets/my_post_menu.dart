@@ -6,7 +6,7 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
 import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
-import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
+import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 
 class MyPostMenu extends ConsumerWidget {
   final PostModel post;
