@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yeong_clova_mood/models/f_post_model.dart';
 import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
 import 'package:yeong_clova_mood/views/abc_authentication/a_splash_screen.dart';
 import 'package:yeong_clova_mood/views/abc_authentication/b0_sign_up_screen.dart';
 import 'package:yeong_clova_mood/views/abc_authentication/c_login_screen.dart';
 import 'package:yeong_clova_mood/views/d_common/d_main_navigation_screen.dart';
+import 'package:yeong_clova_mood/views/e_my/eg_detail_screen.dart';
 import 'package:yeong_clova_mood/views/f_upload/f_upload_screen.dart';
 import 'package:yeong_clova_mood/views/h_setting_screen.dart';
 
@@ -80,6 +82,28 @@ final routerProvider = Provider(
             },
           );
         },
+        routes: [
+          GoRoute(
+            name: DetailScreen.routeName,
+            path: DetailScreen.routeUrl,
+            pageBuilder: (context, state) {
+              final tab = state.params["tab"]!;
+              final postId = state.params["postId"]!;
+              final post = state.extra as PostModel;
+              return CustomTransitionPage(
+                key: state.pageKey,
+                child: DetailScreen(tab: tab, postId: postId, post: post),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+              );
+            },
+          )
+        ],
       ),
       GoRoute(
         name: UploadScreen.routeName,

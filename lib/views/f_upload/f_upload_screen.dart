@@ -149,7 +149,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
             builder: (context, ref, child) {
               final createdAt = ref.watch(postUploadProvider).createdAt;
               return TtitleMedium18(
-                "${createdAt.month}월 ${createdAt.day}일 ${weekdays[createdAt.weekday]}요일",
+                "${createdAt.month}월 ${createdAt.day}일 ${weekdays[createdAt.weekday % 7]}요일",
               );
             },
           ),
