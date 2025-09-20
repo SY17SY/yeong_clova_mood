@@ -13,32 +13,10 @@ class MyRepository {
 
   String? get _currentUserId => _ref.read(authRepository).user?.uid;
 
-  Stream<List<PostModel>> getMyTodayPosts() {
+  Stream<List<PostModel>> getMyPosts(DateTime date) {
     if (_currentUserId == null) return Stream.value([]);
 
-    final today = DateTime.now();
-    final startOfDay = DateTime(today.year, today.month, today.day);
-    final endOfDay = startOfDay.add(const Duration(days: 1));
-
-    final query = _db
-        .collection("posts")
-        .where("uid", isEqualTo: _currentUserId)
-        .where("createdAt",
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        .where("createdAt", isLessThan: Timestamp.fromDate(endOfDay))
-        .orderBy("createdAt", descending: true)
-        .snapshots();
-
-    return query.map((event) => event.docs
-        .map((doc) => PostModel.fromJson(doc.data(), postId: doc.id))
-        .toList());
-  }
-
-  Stream<List<PostModel>> getMySelectedDatePosts(DateTime selectedDate) {
-    if (_currentUserId == null) return Stream.value([]);
-
-    final startOfDay =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    final startOfDay = DateTime(date.year, date.month, date.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
 
     final query = _db

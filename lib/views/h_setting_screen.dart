@@ -37,7 +37,6 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             onPressed: () async {
               await ref.read(authRepository).logOut();
               if (mounted && context.mounted) {
-                context.pop();
                 context.go(SignUpScreen.routeUrl);
               }
             },

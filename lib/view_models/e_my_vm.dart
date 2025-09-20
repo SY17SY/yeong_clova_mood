@@ -7,12 +7,13 @@ class MyViewModel extends StreamNotifier<List<PostModel>> {
   @override
   Stream<List<PostModel>> build() {
     final repository = ref.read(myRepository);
-    return repository.getMyTodayPosts();
+    final date = ref.watch(mySelectedDateProvider).selectedDate;
+    return repository.getMyPosts(date);
   }
 
   Future<void> deletePost(String postId) async {
-    final repository = ref.read(myRepository);
     final uid = ref.read(authRepository).user!.uid;
+    final repository = ref.read(myRepository);
     await repository.deletePost(postId);
     await repository.deletePostFiles(uid: uid, postId: postId);
   }
@@ -42,15 +43,6 @@ class MySelectedDateViewModel extends StateNotifier<MySelectedDateState> {
   }
 }
 
-class MySelectedDatePostsViewModel extends StreamNotifier<List<PostModel>> {
-  @override
-  Stream<List<PostModel>> build() {
-    final repository = ref.read(myRepository);
-    final selectedDate = ref.watch(mySelectedDateProvider).selectedDate;
-    return repository.getMySelectedDatePosts(selectedDate);
-  }
-}
-
 final myProvider = StreamNotifierProvider<MyViewModel, List<PostModel>>(
   () => MyViewModel(),
 );
@@ -58,9 +50,4 @@ final myProvider = StreamNotifierProvider<MyViewModel, List<PostModel>>(
 final mySelectedDateProvider =
     StateNotifierProvider<MySelectedDateViewModel, MySelectedDateState>(
   (ref) => MySelectedDateViewModel(),
-);
-
-final mySelectedDatePostsProvider =
-    StreamNotifierProvider<MySelectedDatePostsViewModel, List<PostModel>>(
-  () => MySelectedDatePostsViewModel(),
 );

@@ -13,16 +13,16 @@ import 'package:yeong_clova_mood/utils.dart';
 import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 import 'package:yeong_clova_mood/widgets/my_post_menu.dart';
 
-class Post extends ConsumerStatefulWidget {
+class MyPost extends ConsumerStatefulWidget {
   final PostModel post;
 
-  const Post({super.key, required this.post});
+  const MyPost({super.key, required this.post});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _PostState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyPostState();
 }
 
-class _PostState extends ConsumerState<Post> {
+class _MyPostState extends ConsumerState<MyPost> {
   late final hour = widget.post.createdAt!.toDate().hour;
   late final minute = widget.post.createdAt!.toDate().minute;
 
@@ -100,13 +100,16 @@ class _PostState extends ConsumerState<Post> {
                 if (widget.post.thumbUrl != null &&
                     widget.post.thumbUrl!.isNotEmpty) ...[
                   Gaps.v16,
-                  Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Sizes.d8),
-                      image: DecorationImage(
-                        image: NetworkImage(toImageUrl(widget.post.thumbUrl!)),
-                        fit: BoxFit.cover,
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Sizes.d8),
+                        image: DecorationImage(
+                          image:
+                              NetworkImage(toImageUrl(widget.post.thumbUrl!)),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

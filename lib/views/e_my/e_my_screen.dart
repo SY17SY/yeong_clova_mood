@@ -9,9 +9,9 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
 import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 import 'package:yeong_clova_mood/views/h_setting_screen.dart';
-import 'package:yeong_clova_mood/widgets/horiz_date.dart';
+import 'package:yeong_clova_mood/widgets/my_horiz_date.dart';
 import 'package:yeong_clova_mood/widgets/my_sliver_app_bar.dart';
-import 'package:yeong_clova_mood/widgets/post.dart';
+import 'package:yeong_clova_mood/widgets/my_post.dart';
 
 class MyScreen extends ConsumerStatefulWidget {
   static const routeName = "mine";
@@ -70,7 +70,7 @@ class _MyScreenState extends ConsumerState<MyScreen> {
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
-        ref.watch(mySelectedDatePostsProvider).when(
+        ref.watch(myProvider).when(
               loading: () => SliverMainAxisGroup(
                 slivers: [
                   MySliverAppBar(),
@@ -149,7 +149,7 @@ class _MyScreenState extends ConsumerState<MyScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            HorizDate(),
+                            MyHorizDate(),
                             Container(
                               height: Sizes.d52,
                               margin: EdgeInsets.symmetric(vertical: Sizes.d10),
@@ -193,7 +193,7 @@ class _MyScreenState extends ConsumerState<MyScreen> {
                     ),
                     SliverList.separated(
                       itemCount: posts.length,
-                      itemBuilder: (context, index) => Post(
+                      itemBuilder: (context, index) => MyPost(
                         key: _postKeys[index],
                         post: posts[index],
                       ),
@@ -204,6 +204,9 @@ class _MyScreenState extends ConsumerState<MyScreen> {
                         child: Divider(color: AppColors.neutral500),
                       ),
                     ),
+                    SliverToBoxAdapter(
+                      child: Gaps.v40,
+                    )
                   ],
                 );
               },

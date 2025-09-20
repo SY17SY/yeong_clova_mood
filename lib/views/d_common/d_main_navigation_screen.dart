@@ -57,7 +57,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
               onTap: () => _onTap(0),
             ),
             NavTab(
-              svgPath: "assets/images/mini_clova.svg",
+              svgPath: "assets/images/upload_icon.svg",
               text: "upload",
               isSelected: _selectedIndex == 1,
               onTap: _onUploadTap,

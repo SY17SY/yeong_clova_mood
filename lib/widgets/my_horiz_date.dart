@@ -7,14 +7,14 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
 
-class HorizDate extends ConsumerStatefulWidget {
-  const HorizDate({super.key});
+class MyHorizDate extends ConsumerStatefulWidget {
+  const MyHorizDate({super.key});
 
   @override
-  HorizDateState createState() => HorizDateState();
+  MyHorizDateState createState() => MyHorizDateState();
 }
 
-class HorizDateState extends ConsumerState<HorizDate> {
+class MyHorizDateState extends ConsumerState<MyHorizDate> {
   final PageController _pageController = PageController();
 
   void _onDateSelected(DateTime date) {
@@ -44,7 +44,9 @@ class HorizDateState extends ConsumerState<HorizDate> {
           final today = DateTime.now();
           final startOfWeek = today.subtract(Duration(days: 6 + pageIndex * 7));
           final weekDates = List.generate(
-              7, (dayIndex) => startOfWeek.add(Duration(days: dayIndex)));
+            7,
+            (dayIndex) => startOfWeek.add(Duration(days: dayIndex)),
+          );
 
           return Row(
             children: weekDates.map((date) {
