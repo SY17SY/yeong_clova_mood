@@ -7,7 +7,7 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/view_models/b_sign_up_vm.dart';
 import 'package:yeong_clova_mood/view_models/c_login_vm.dart';
 import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
-import 'package:yeong_clova_mood/widgets/input_clear_button.dart';
+import 'package:yeong_clova_mood/views/abc_authentication/widgets/input_clear_button.dart';
 
 enum AuthFormType { login, signUp }
 

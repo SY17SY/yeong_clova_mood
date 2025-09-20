@@ -5,7 +5,7 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/views/e_my/e_my_screen.dart';
 import 'package:yeong_clova_mood/views/f_upload/f_upload_screen.dart';
 import 'package:yeong_clova_mood/views/g_your/g_your_screen.dart';
-import 'package:yeong_clova_mood/widgets/nav_tab.dart';
+import 'package:yeong_clova_mood/views/d_common/widgets/nav_tab.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
   static const routeName = "main-navigation";

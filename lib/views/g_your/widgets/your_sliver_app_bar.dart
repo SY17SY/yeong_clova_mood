@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:yeong_clova_mood/constants/colors.dart';
 import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
-import 'package:yeong_clova_mood/widgets/your_horiz_date.dart';
+import 'package:yeong_clova_mood/views/g_your/widgets/your_horiz_date.dart';
 
 class YourSliverAppBar extends StatelessWidget {
   const YourSliverAppBar({super.key});

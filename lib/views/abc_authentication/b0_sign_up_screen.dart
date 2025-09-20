@@ -8,8 +8,8 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/views/abc_authentication/b1_email_sign_up_screen.dart';
 import 'package:yeong_clova_mood/views/abc_authentication/c_login_screen.dart';
-import 'package:yeong_clova_mood/widgets/auth_button.dart';
-import 'package:yeong_clova_mood/widgets/bottom_auth.dart';
+import 'package:yeong_clova_mood/views/abc_authentication/widgets/auth_button.dart';
+import 'package:yeong_clova_mood/views/abc_authentication/widgets/bottom_auth.dart';
 
 class SignUpScreen extends ConsumerWidget {
   static const routeName = "sign-up";

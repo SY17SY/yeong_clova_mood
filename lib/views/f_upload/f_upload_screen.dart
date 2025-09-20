@@ -12,8 +12,8 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/view_models/f_post_vm.dart';
 import 'package:yeong_clova_mood/views/f_upload/f_camera_screen.dart';
-import 'package:yeong_clova_mood/widgets/bottom_modal_datetime.dart';
-import 'package:yeong_clova_mood/widgets/mood_buttons.dart';
+import 'package:yeong_clova_mood/views/f_upload/widgets/bottom_modal_datetime.dart';
+import 'package:yeong_clova_mood/views/f_upload/widgets/mood_buttons.dart';
 
 class UploadScreen extends ConsumerStatefulWidget {
   static const routeName = "upload";

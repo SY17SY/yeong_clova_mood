@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yeong_clova_mood/constants/colors.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/view_models/g_your_vm.dart';
-import 'package:yeong_clova_mood/widgets/your_post.dart';
-import 'package:yeong_clova_mood/widgets/your_sliver_app_bar.dart';
+import 'package:yeong_clova_mood/views/g_your/widgets/your_post.dart';
+import 'package:yeong_clova_mood/views/g_your/widgets/your_sliver_app_bar.dart';
 
 class YourScreen extends ConsumerStatefulWidget {
   static const routeName = "yours";

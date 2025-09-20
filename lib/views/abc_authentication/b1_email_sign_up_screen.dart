@@ -5,8 +5,8 @@ import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/view_models/b_sign_up_vm.dart';
-import 'package:yeong_clova_mood/widgets/auth_text_form_field.dart';
-import 'package:yeong_clova_mood/widgets/form_button.dart';
+import 'package:yeong_clova_mood/views/abc_authentication/widgets/auth_text_form_field.dart';
+import 'package:yeong_clova_mood/views/abc_authentication/widgets/form_button.dart';
 
 class EmailSignUpScreen extends ConsumerStatefulWidget {
   const EmailSignUpScreen({super.key});
