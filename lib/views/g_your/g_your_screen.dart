@@ -68,12 +68,12 @@ class _YourScreenState extends ConsumerState<YourScreen> {
                   slivers: [
                     YourSliverAppBar(),
                     SliverPadding(
-                      padding: EdgeInsets.all(Sizes.d4),
+                      padding: EdgeInsets.all(Sizes.d2),
                       sliver: SliverGrid.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: Sizes.d4,
-                          mainAxisSpacing: Sizes.d4,
+                          crossAxisCount: 3,
+                          crossAxisSpacing: Sizes.d2,
+                          mainAxisSpacing: Sizes.d2,
                           childAspectRatio: 1.0,
                         ),
                         itemCount: posts.length,

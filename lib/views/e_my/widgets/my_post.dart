@@ -10,6 +10,7 @@ import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
 import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
 import 'package:yeong_clova_mood/utils.dart';
+import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
 import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 import 'package:yeong_clova_mood/views/e_my/widgets/my_post_menu.dart';
 
@@ -25,6 +26,10 @@ class MyPost extends ConsumerStatefulWidget {
 class _MyPostState extends ConsumerState<MyPost> {
   late final hour = widget.post.createdAt!.toDate().hour;
   late final minute = widget.post.createdAt!.toDate().minute;
+
+  void _onClovaTap() {
+    ref.read(myProvider.notifier).toggleClovaPost(widget.post.id);
+  }
 
   void _onMyMenuTap() async {
     await showModalBottomSheet(
@@ -115,31 +120,72 @@ class _MyPostState extends ConsumerState<MyPost> {
                   ),
                 ],
                 Gaps.v6,
-                Row(
-                  spacing: Sizes.d4,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/images/mini_clova.svg",
-                      width: Sizes.d24,
-                      height: Sizes.d24,
-                      colorFilter: ColorFilter.mode(
-                        isDark ? AppColors.neutral200 : AppColors.neutral800,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    TbodySmall14(widget.post.clovas.toString()),
-                    Gaps.h10,
-                    SvgPicture.asset(
-                      "assets/images/comment.svg",
-                      width: Sizes.d24,
-                      height: Sizes.d24,
-                      colorFilter: ColorFilter.mode(
-                        isDark ? AppColors.neutral200 : AppColors.neutral800,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    TbodySmall14(widget.post.comments.toString()),
-                  ],
+                Consumer(
+                  builder: (context, ref, child) {
+                    return FutureBuilder<bool>(
+                      future: ref
+                          .watch(myProvider.notifier)
+                          .givenClova(widget.post.id),
+                      builder: (context, snapshot) {
+                        final givenClova = snapshot.data ?? false;
+                        return Row(
+                          spacing: Sizes.d18,
+                          children: [
+                            GestureDetector(
+                              onTap: _onClovaTap,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/images/mini_clova.svg",
+                                    width: Sizes.d24,
+                                    height: Sizes.d24,
+                                    colorFilter: ColorFilter.mode(
+                                      givenClova
+                                          ? isDark
+                                              ? AppColors.primaryLight
+                                              : AppColors.primaryDark
+                                          : isDark
+                                              ? AppColors.neutral200
+                                              : AppColors.neutral800,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  Gaps.h4,
+                                  TbodySmall14(
+                                    widget.post.clovas.toString(),
+                                    color: givenClova
+                                        ? isDark
+                                            ? AppColors.primaryLight
+                                            : AppColors.primaryDark
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/images/comment.svg",
+                                  width: Sizes.d24,
+                                  height: Sizes.d24,
+                                  colorFilter: ColorFilter.mode(
+                                    isDark
+                                        ? AppColors.neutral200
+                                        : AppColors.neutral800,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                Gaps.h4,
+                                TbodySmall14(widget.post.comments.toString()),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 )
               ],
             ),

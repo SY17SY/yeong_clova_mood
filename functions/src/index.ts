@@ -96,3 +96,60 @@ export const onPostDeleted = functions.firestore.onDocumentDeleted(
     }
   }
 );
+
+export const onClovaCreated = functions.firestore.onDocumentCreated(
+  {
+    document: "clovas/{clovaId}",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const db = admin.firestore();
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
+
+    const createdAt = snapshot.data().createdAt;
+    const [postId, uid] = event.params.clovaId.split("_");
+
+    await db.collection("posts").doc(postId).collection("clovas").doc(uid).set({
+      createdAt: createdAt,
+    });
+    await db
+      .collection("posts")
+      .doc(postId)
+      .update({
+        clovas: admin.firestore.FieldValue.increment(1),
+      });
+    await db.collection("users").doc(uid).collection("clovas").doc(postId).set({
+      createdAt: createdAt,
+    });
+  }
+);
+
+export const onClovaDeleted = functions.firestore.onDocumentDeleted(
+  {
+    document: "clovas/{clovaId}",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const db = admin.firestore();
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
+
+    const [postId, uid] = event.params.clovaId.split("_");
+
+    await db.collection("posts").doc(postId).collection("clovas").doc(uid).delete();
+    await db
+      .collection("posts")
+      .doc(postId)
+      .update({
+        clovas: admin.firestore.FieldValue.increment(-1),
+      });
+    await db.collection("users").doc(uid).collection("clovas").doc(postId).delete();
+  }
+);

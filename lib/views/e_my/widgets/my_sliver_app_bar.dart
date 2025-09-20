@@ -5,7 +5,7 @@ import 'package:yeong_clova_mood/constants/colors.dart';
 import 'package:yeong_clova_mood/constants/gaps.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/views/h_setting_screen.dart';
-import 'package:yeong_clova_mood/widgets/my_horiz_date.dart';
+import 'package:yeong_clova_mood/views/e_my/widgets/my_horiz_date.dart';
 
 class MySliverAppBar extends StatelessWidget {
   const MySliverAppBar({super.key});

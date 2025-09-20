@@ -32,6 +32,29 @@ class MyRepository {
         .toList());
   }
 
+  Future<bool> givenClova({required String postId, required String uid}) async {
+    final query =
+        _db.collection("users").doc(uid).collection("clovas").doc(postId);
+    final clovaPost = await query.get();
+    if (clovaPost.exists) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> toggleClovaPost(
+      {required String postId, required String uid}) async {
+    final query = _db.collection("clovas").doc("${postId}_$uid");
+    final clova = await query.get();
+
+    if (!clova.exists) {
+      await query.set({"createdAt": Timestamp.now()});
+    } else {
+      await query.delete();
+    }
+  }
+
   Future<void> deletePost(String postId) async {
     if (_currentUserId == null) throw Exception("User not authenticated");
 

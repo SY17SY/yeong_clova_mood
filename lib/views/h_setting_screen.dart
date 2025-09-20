@@ -197,10 +197,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                   size: Sizes.d20,
                 ),
               ),
-              title: TbodyMedium16(
-                "로그아웃",
-                color: AppColors.error,
-              ),
+              title: TbodyMedium16("로그아웃", color: AppColors.error),
               trailing: FaIcon(
                 FontAwesomeIcons.chevronRight,
                 color: AppColors.neutral400,

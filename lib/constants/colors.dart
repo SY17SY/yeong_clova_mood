@@ -45,12 +45,6 @@ class AppColors {
   static final neutral800 = OklchColor(0.3, 0.008, 267).toColor();
   static final neutral900 = OklchColor(0.1, 0.008, 267).toColor();
 
-  // Text colors
-  static final textPrimaryLight = OklchColor(0.15, 0.02, 280).toColor();
-  static final textPrimaryDark = OklchColor(0.95, 0.01, 280).toColor();
-  static final textSecondaryLight = OklchColor(0.45, 0.03, 280).toColor();
-  static final textSecondaryDark = OklchColor(0.75, 0.02, 280).toColor();
-
   // Success, Warning, Error colors
   static final success = OklchColor(0.7, 0.18, 140).toColor();
   static final warning = OklchColor(0.8, 0.18, 80).toColor();

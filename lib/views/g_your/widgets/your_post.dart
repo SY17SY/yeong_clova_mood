@@ -37,7 +37,7 @@ class YourPost extends ConsumerWidget {
           ShaderMask(
             shaderCallback: (bounds) => LinearGradient(
               colors: [
-                Colors.black.withValues(alpha: 0.3),
+                Colors.black.withValues(alpha: 0.2),
                 Colors.transparent,
               ],
               begin: Alignment.bottomCenter,
@@ -51,15 +51,16 @@ class YourPost extends ConsumerWidget {
             ),
           ),
           Positioned(
-            bottom: Sizes.d12,
+            bottom: Sizes.d8,
             left: Sizes.d8,
             right: Sizes.d8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TtitleSmall16(
+                TlabelLarge14(
                   post.title,
+                  maxLines: 2,
                   color: Colors.white,
                 ),
                 if (post.content != null && post.content!.isNotEmpty) ...[
@@ -68,7 +69,7 @@ class YourPost extends ConsumerWidget {
                     opacity: 0.7,
                     child: TbodySmall14(
                       post.content!,
-                      maxLines: 2,
+                      maxLines: 1,
                       color: Colors.white,
                     ),
                   ),
@@ -81,8 +82,8 @@ class YourPost extends ConsumerWidget {
             right: Sizes.d12,
             child: Image.asset(
               moodImgs[moodsMood[post.mood]]!,
-              width: Sizes.d36,
-              height: Sizes.d36,
+              width: Sizes.d32,
+              height: Sizes.d32,
             ),
           )
         ],

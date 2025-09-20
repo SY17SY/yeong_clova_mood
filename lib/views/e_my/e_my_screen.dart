@@ -9,9 +9,9 @@ import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
 import 'package:yeong_clova_mood/view_models/h_settings_vm.dart';
 import 'package:yeong_clova_mood/views/h_setting_screen.dart';
-import 'package:yeong_clova_mood/widgets/my_horiz_date.dart';
-import 'package:yeong_clova_mood/widgets/my_sliver_app_bar.dart';
-import 'package:yeong_clova_mood/widgets/my_post.dart';
+import 'package:yeong_clova_mood/views/e_my/widgets/my_horiz_date.dart';
+import 'package:yeong_clova_mood/views/e_my/widgets/my_sliver_app_bar.dart';
+import 'package:yeong_clova_mood/views/e_my/widgets/my_post.dart';
 
 class MyScreen extends ConsumerStatefulWidget {
   static const routeName = "mine";
