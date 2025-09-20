@@ -183,25 +183,24 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
           ],
         ),
         body: SafeArea(
-          child: Column(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(left: Sizes.d8, top: Sizes.d16),
+                  child: MoodButtons(),
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                          padding: EdgeInsets.all(Sizes.d16),
-                          child: MoodButtons(),
-                        ),
-                      ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
-                          Sizes.d32,
+                          Sizes.d16,
                           Sizes.d10,
-                          Sizes.d32,
+                          Sizes.d16,
                           Sizes.d20,
                         ),
                         child: Column(

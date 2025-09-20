@@ -29,15 +29,11 @@ class HorizDateState extends ConsumerState<HorizDate> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedDate = ref.watch(mySelectedDateProvider).selectedDate;
     return Container(
-      height: Sizes.d80,
+      height: Sizes.d64,
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            color: AppColors.neutral300,
-            width: 0.5,
-          ),
+          bottom: BorderSide(color: AppColors.neutral300, width: 0.5),
         ),
       ),
       child: PageView.builder(
@@ -52,9 +48,8 @@ class HorizDateState extends ConsumerState<HorizDate> {
 
           return Row(
             children: weekDates.map((date) {
-              final isSelected = selectedDate.year == date.year &&
-                  selectedDate.month == date.month &&
-                  selectedDate.day == date.day;
+              final isSelected =
+                  ref.watch(mySelectedDateProvider.notifier).isSelected(date);
 
               return Expanded(
                 child: GestureDetector(

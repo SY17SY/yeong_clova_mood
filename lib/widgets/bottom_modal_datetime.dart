@@ -83,7 +83,7 @@ class _BottomModalDatetimeState extends ConsumerState<BottomModalDatetime> {
                 now.month,
                 now.day,
                 23,
-                50,
+                59,
               ),
               minuteInterval: 10,
               mode: CupertinoDatePickerMode.dateAndTime,

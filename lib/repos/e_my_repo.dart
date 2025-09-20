@@ -22,6 +22,10 @@ class MyRepository {
 
     final query = _db
         .collection("posts")
+        .where("uid", isEqualTo: _currentUserId)
+        .where("createdAt",
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where("createdAt", isLessThan: Timestamp.fromDate(endOfDay))
         .orderBy("createdAt", descending: true)
         .snapshots();
 
@@ -39,9 +43,12 @@ class MyRepository {
 
     final query = _db
         .collection("posts")
+        .where("uid", isEqualTo: _currentUserId)
+        .where("createdAt",
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where("createdAt", isLessThan: Timestamp.fromDate(endOfDay))
         .orderBy("createdAt", descending: true)
         .snapshots();
-
     return query.map((event) => event.docs
         .map((doc) => PostModel.fromJson(doc.data(), postId: doc.id))
         .toList());

@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yeong_clova_mood/constants/colors.dart';
 import 'package:yeong_clova_mood/constants/sizes.dart';
 import 'package:yeong_clova_mood/constants/text.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
 import 'package:yeong_clova_mood/view_models/e_my_vm.dart';
+import 'package:yeong_clova_mood/view_models/g_settings_vm.dart';
 
-class PostMenu extends ConsumerWidget {
+class MyPostMenu extends ConsumerWidget {
   final PostModel post;
 
-  const PostMenu({super.key, required this.post});
+  const MyPostMenu({super.key, required this.post});
 
   void _onDeleteTap(BuildContext context, WidgetRef ref) async {
     await showCupertinoDialog(
@@ -39,13 +40,14 @@ class PostMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDark = ref.watch(settingsProvider.notifier).isDark(context);
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(Sizes.d10)),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
           Sizes.d24,
-          Sizes.d8,
+          0,
           Sizes.d24,
           Sizes.d48,
         ),
@@ -56,8 +58,8 @@ class PostMenu extends ConsumerWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(Sizes.d16),
+                color: isDark ? AppColors.neutral700 : AppColors.neutral100,
+                borderRadius: BorderRadius.circular(Sizes.d12),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -67,7 +69,7 @@ class PostMenu extends ConsumerWidget {
                     behavior: HitTestBehavior.opaque,
                     child: Padding(
                       padding: const EdgeInsets.all(Sizes.d24),
-                      child: TtitleSmall16("삭제", color: Colors.red),
+                      child: TtitleSmall16("삭제", color: AppColors.error),
                     ),
                   ),
                 ],
