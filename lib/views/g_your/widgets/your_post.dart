@@ -55,7 +55,7 @@ class YourPost extends ConsumerWidget {
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
-                  end: Alignment.center,
+                  end: Alignment.topCenter,
                 ).createShader(bounds),
                 blendMode: BlendMode.srcIn,
                 child: Container(

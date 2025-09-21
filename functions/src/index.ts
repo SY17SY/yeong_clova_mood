@@ -33,31 +33,56 @@ setGlobalOptions({ maxInstances: 10 });
 
 admin.initializeApp();
 
-export const onPostDeleted = functions.firestore.onDocumentDeleted(
+export const onPostCreated = functions.firestore.onDocumentCreated(
   {
     document: "posts/{postId}",
     region: "asia-northeast3",
   },
   async (event) => {
+    const db = admin.firestore();
     const snapshot = event.data;
     if (!snapshot) {
       console.log("No data associated with the event");
       return;
     }
 
+    const data = snapshot.data();
+    const postId = event.params.postId;
+
     try {
-      const postData = snapshot.data();
-      const postId = event.params.postId;
-      console.log(`Processing deletion for post ${postId}`);
+      await db.collection("users").doc(data.uid).collection("posts").doc(postId).set(data);
+      console.log(`Post ${postId} replicated to user ${data.uid} collection`);
+    } catch (e) {
+      console.error("Error replicating post:", e);
+    }
+  }
+);
 
-      const bucket = admin.storage().bucket();
-      const deletePromises: Promise<void>[] = [];
+export const onPostDeleted = functions.firestore.onDocumentDeleted(
+  {
+    document: "posts/{postId}",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const db = admin.firestore();
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
 
-      if (postData.thumbUrl && typeof postData.thumbUrl === "string") {
+    const data = snapshot.data();
+    const postId = event.params.postId;
+
+    const bucket = admin.storage().bucket();
+    const deletePromises: Promise<void>[] = [];
+
+    try {
+      if (data.thumbUrl && typeof data.thumbUrl === "string") {
         deletePromises.push(
           (async () => {
             try {
-              const urlParts = postData.thumbUrl.split("/o/");
+              const urlParts = data.thumbUrl.split("/o/");
               if (urlParts.length > 1) {
                 const filePath = decodeURIComponent(urlParts[1].split("?")[0]);
                 console.log(`Deleting thumb image: ${filePath}`);
@@ -65,14 +90,14 @@ export const onPostDeleted = functions.firestore.onDocumentDeleted(
                 console.log(`Successfully deleted thumb image: ${filePath}`);
               }
             } catch (error) {
-              console.error(`Failed to delete thumb image ${postData.thumbUrl}:`, error);
+              console.error(`Failed to delete thumb image ${data.thumbUrl}:`, error);
             }
           })()
         );
       }
 
-      if (postData.imgUrls && Array.isArray(postData.imgUrls)) {
-        const imgDeletePromises = postData.imgUrls.map(async (imageUrl: string) => {
+      if (data.imgUrls && Array.isArray(data.imgUrls)) {
+        const imgDeletePromises = data.imgUrls.map(async (imageUrl: string) => {
           try {
             const urlParts = imageUrl.split("/o/");
             if (urlParts.length > 1) {
@@ -94,6 +119,12 @@ export const onPostDeleted = functions.firestore.onDocumentDeleted(
     } catch (error) {
       console.error("Error in onPostDeleted:", error);
     }
+
+    try {
+      await db.collection("users").doc(data.uid).collection("posts").doc(postId).delete();
+    } catch (e) {
+      console.error("Error in onPostDeleted in Users:", e);
+    }
   }
 );
 
@@ -111,20 +142,32 @@ export const onClovaCreated = functions.firestore.onDocumentCreated(
     }
 
     const createdAt = snapshot.data().createdAt;
-    const [postId, uid] = event.params.clovaId.split("_");
+    const [postUid, postId, uid] = event.params.clovaId.split("_");
 
-    await db.collection("posts").doc(postId).collection("clovas").doc(uid).set({
-      createdAt: createdAt,
-    });
-    await db
-      .collection("posts")
-      .doc(postId)
-      .update({
-        clovas: admin.firestore.FieldValue.increment(1),
+    try {
+      await db.collection("posts").doc(postId).collection("clovas").doc(uid).set({
+        createdAt: createdAt,
       });
-    await db.collection("users").doc(uid).collection("clovas").doc(postId).set({
-      createdAt: createdAt,
-    });
+      await db
+        .collection("posts")
+        .doc(postId)
+        .update({
+          clovas: admin.firestore.FieldValue.increment(1),
+        });
+      await db.collection("users").doc(uid).collection("clovas").doc(postId).set({
+        createdAt: createdAt,
+      });
+      await db
+        .collection("users")
+        .doc(postUid)
+        .collection("posts")
+        .doc(postId)
+        .update({
+          clovas: admin.firestore.FieldValue.increment(1),
+        });
+    } catch (e) {
+      console.error("Error in onClovaCreated:", e);
+    }
   }
 );
 
@@ -141,15 +184,106 @@ export const onClovaDeleted = functions.firestore.onDocumentDeleted(
       return;
     }
 
-    const [postId, uid] = event.params.clovaId.split("_");
+    const [postUid, postId, uid] = event.params.clovaId.split("_");
 
-    await db.collection("posts").doc(postId).collection("clovas").doc(uid).delete();
-    await db
-      .collection("posts")
-      .doc(postId)
-      .update({
-        clovas: admin.firestore.FieldValue.increment(-1),
-      });
-    await db.collection("users").doc(uid).collection("clovas").doc(postId).delete();
+    try {
+      await db.collection("posts").doc(postId).collection("clovas").doc(uid).delete();
+      await db
+        .collection("posts")
+        .doc(postId)
+        .update({
+          clovas: admin.firestore.FieldValue.increment(-1),
+        });
+      await db.collection("users").doc(uid).collection("clovas").doc(postId).delete();
+      await db
+        .collection("users")
+        .doc(postUid)
+        .collection("posts")
+        .doc(postId)
+        .update({
+          clovas: admin.firestore.FieldValue.increment(-1),
+        });
+    } catch (e) {
+      console.error("Error deleting clova:", e);
+    }
+  }
+);
+
+export const onCommentCreated = functions.firestore.onDocumentCreated(
+  {
+    document: "posts/{postId}/comments/{commentId}",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const db = admin.firestore();
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
+
+    const data = snapshot.data();
+    const postId = event.params.postId;
+    const commentId = event.params.commentId;
+    const [postUid, uid, _] = commentId.split("_"); // _: createdAt
+
+    try {
+      await db.collection("users").doc(uid).collection("comments").doc(commentId).set(data);
+      await db
+        .collection("posts")
+        .doc(postId)
+        .update({
+          comments: admin.firestore.FieldValue.increment(1),
+        });
+      await db
+        .collection("users")
+        .doc(postUid)
+        .collection("posts")
+        .doc(postId)
+        .update({
+          comments: admin.firestore.FieldValue.increment(1),
+        });
+    } catch (e) {
+      console.error("Error in onCommentCreated:", e);
+    }
+  }
+);
+
+export const onCommentDeleted = functions.firestore.onDocumentDeleted(
+  {
+    document: "posts/{postId}/comments/{commentId}",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const db = admin.firestore();
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
+
+    const postId = event.params.postId;
+    const commentId = event.params.commentId;
+    const [postUid, uid, _] = commentId.split("_"); // _: createdAt
+
+    try {
+      await db.collection("users").doc(uid).collection("comments").doc(commentId).delete();
+      await db
+        .collection("posts")
+        .doc(postId)
+        .update({
+          comments: admin.firestore.FieldValue.increment(-1),
+        });
+      await db
+        .collection("users")
+        .doc(postUid)
+        .collection("posts")
+        .doc(postId)
+        .update({
+          comments: admin.firestore.FieldValue.increment(-1),
+        });
+    } catch (e) {
+      console.error("Error in onCommentCreated:", e);
+    }
   }
 );

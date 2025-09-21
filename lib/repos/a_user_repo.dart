@@ -41,7 +41,7 @@ class UserRepository {
           .collection("users")
           .where("name", isGreaterThanOrEqualTo: keyword.trim())
           .where("name", isLessThanOrEqualTo: "${keyword.trim()}\uf8ff")
-          .limit(50);
+          .limit(10);
 
       final QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
       final List<UserModel> users = snapshot.docs

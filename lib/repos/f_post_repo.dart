@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yeong_clova_mood/models/eg_comment_model.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
 
 class PostRepository {
@@ -30,14 +31,42 @@ class PostRepository {
     return fileName;
   }
 
-  Stream<List<PostModel>> getPosts() {
-    final query = _db
+  Stream<List<PostModel>> getUserPosts(String uid) {
+    return _db
+        .collection("users")
+        .doc(uid)
         .collection("posts")
-        .orderBy("createdAt", descending: true)
-        .snapshots();
-    return query.map((event) => event.docs
-        .map((doc) => PostModel.fromJson(doc.data(), postId: doc.id))
-        .toList());
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map(
+              (doc) => PostModel.fromJson(doc.data(), postId: doc.id),
+            )
+            .toList());
+  }
+
+  Future<CommentModel> createComment(CommentModel comment) async {
+    final commentId = "${comment.postUid}_${comment.uid}_${comment.createdAt}";
+    await _db
+        .collection("posts")
+        .doc(comment.postId)
+        .collection("comments")
+        .doc(commentId)
+        .set(comment.toJson());
+    return comment;
+  }
+
+  Stream<List<CommentModel>> getPostComments(String postId) {
+    return _db
+        .collection("posts")
+        .doc(postId)
+        .collection("comments")
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((doc) => CommentModel.fromJson(
+                  doc.data(),
+                  commentId: doc.id,
+                ))
+            .toList());
   }
 }
 

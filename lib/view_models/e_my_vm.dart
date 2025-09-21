@@ -11,16 +11,23 @@ class MyViewModel extends StreamNotifier<List<PostModel>> {
     return repository.getMyPosts(date);
   }
 
-  Future<bool> givenClova(String postId) async {
+  Stream<bool> givenClova(String postId) {
     final repository = ref.read(myRepository);
     final uid = ref.read(authRepository).user!.uid;
-    return await repository.givenClova(postId: postId, uid: uid);
+    return repository.givenClova(postId: postId, uid: uid);
   }
 
-  Future<void> toggleClovaPost(String postId) async {
+  Future<void> toggleClovaPost({
+    required String postUid,
+    required String postId,
+  }) async {
     final repository = ref.read(myRepository);
     final uid = ref.read(authRepository).user!.uid;
-    await repository.toggleClovaPost(postId: postId, uid: uid);
+    await repository.toggleClovaPost(
+      postUid: postUid,
+      postId: postId,
+      uid: uid,
+    );
   }
 
   Future<void> deletePost(String postId) async {
@@ -63,3 +70,9 @@ final mySelectedDateProvider =
     StateNotifierProvider<MySelectedDateViewModel, MySelectedDateState>(
   (ref) => MySelectedDateViewModel(),
 );
+
+final givenClovaProvider = StreamProvider.family<bool, String>((ref, postId) {
+  final repository = ref.read(myRepository);
+  final uid = ref.read(authRepository).user!.uid;
+  return repository.givenClova(postId: postId, uid: uid);
+});

@@ -31,7 +31,10 @@ class _MyPostState extends ConsumerState<MyPost> {
   late final minute = widget.post.createdAt!.toDate().minute;
 
   void _onClovaTap() {
-    ref.read(myProvider.notifier).toggleClovaPost(widget.post.id);
+    ref.read(myProvider.notifier).toggleClovaPost(
+          postUid: widget.post.uid,
+          postId: widget.post.id,
+        );
   }
 
   void _onPostTap() {
@@ -97,7 +100,7 @@ class _MyPostState extends ConsumerState<MyPost> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TlabelSmall12(
-                        "$hour시 $minute분",
+                        minute == 0 ? "$hour시" : "$hour시 $minute분",
                         color: AppColors.neutral500,
                       ),
                       IconButton(
@@ -138,12 +141,10 @@ class _MyPostState extends ConsumerState<MyPost> {
               Gaps.v10,
               Consumer(
                 builder: (context, ref, child) {
-                  return FutureBuilder<bool>(
-                    future: ref
-                        .watch(myProvider.notifier)
-                        .givenClova(widget.post.id),
-                    builder: (context, snapshot) {
-                      final givenClova = snapshot.data ?? false;
+                  final givenClovaAsync =
+                      ref.watch(givenClovaProvider(widget.post.id));
+                  return givenClovaAsync.when(
+                    data: (givenClova) {
                       return Row(
                         spacing: Sizes.d18,
                         children: [
@@ -200,6 +201,98 @@ class _MyPostState extends ConsumerState<MyPost> {
                         ],
                       );
                     },
+                    loading: () => Row(
+                      spacing: Sizes.d18,
+                      children: [
+                        GestureDetector(
+                          onTap: _onClovaTap,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/images/mini_clova.svg",
+                                width: Sizes.d24,
+                                height: Sizes.d24,
+                                colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? AppColors.neutral200
+                                      : AppColors.neutral800,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              Gaps.h4,
+                              TbodySmall14(
+                                widget.post.clovas.toString(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/images/comment.svg",
+                              width: Sizes.d24,
+                              height: Sizes.d24,
+                              colorFilter: ColorFilter.mode(
+                                isDark
+                                    ? AppColors.neutral200
+                                    : AppColors.neutral800,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            Gaps.h4,
+                            TbodySmall14(widget.post.comments.toString()),
+                          ],
+                        ),
+                      ],
+                    ),
+                    error: (error, stack) => Row(
+                      spacing: Sizes.d18,
+                      children: [
+                        GestureDetector(
+                          onTap: _onClovaTap,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/images/mini_clova.svg",
+                                width: Sizes.d24,
+                                height: Sizes.d24,
+                                colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? AppColors.neutral200
+                                      : AppColors.neutral800,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              Gaps.h4,
+                              TbodySmall14(
+                                widget.post.clovas.toString(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/images/comment.svg",
+                              width: Sizes.d24,
+                              height: Sizes.d24,
+                              colorFilter: ColorFilter.mode(
+                                isDark
+                                    ? AppColors.neutral200
+                                    : AppColors.neutral800,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            Gaps.h4,
+                            TbodySmall14(widget.post.comments.toString()),
+                          ],
+                        ),
+                      ],
+                    ),
                   );
                 },
               )

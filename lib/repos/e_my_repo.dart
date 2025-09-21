@@ -32,20 +32,22 @@ class MyRepository {
         .toList());
   }
 
-  Future<bool> givenClova({required String postId, required String uid}) async {
-    final query =
-        _db.collection("users").doc(uid).collection("clovas").doc(postId);
-    final clovaPost = await query.get();
-    if (clovaPost.exists) {
-      return true;
-    } else {
-      return false;
-    }
+  Stream<bool> givenClova({required String postId, required String uid}) {
+    return _db
+        .collection("users")
+        .doc(uid)
+        .collection("clovas")
+        .doc(postId)
+        .snapshots()
+        .map((doc) => doc.exists);
   }
 
-  Future<void> toggleClovaPost(
-      {required String postId, required String uid}) async {
-    final query = _db.collection("clovas").doc("${postId}_$uid");
+  Future<void> toggleClovaPost({
+    required String postUid,
+    required String postId,
+    required String uid,
+  }) async {
+    final query = _db.collection("clovas").doc("${postUid}_${postId}_$uid");
     final clova = await query.get();
 
     if (!clova.exists) {

@@ -1,22 +1,23 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yeong_clova_mood/models/eg_comment_model.dart';
 import 'package:yeong_clova_mood/models/f_post_model.dart';
+import 'package:yeong_clova_mood/repos/a_user_repo.dart';
 import 'package:yeong_clova_mood/repos/b_auth_repo.dart';
 import 'package:yeong_clova_mood/repos/f_post_repo.dart';
 import 'package:yeong_clova_mood/utils.dart';
 
-class PostViewModel extends StreamNotifier<List<PostModel>> {
+class PostViewModel extends AsyncNotifier<void> {
   late final PostRepository _repository;
 
   @override
-  Stream<List<PostModel>> build() {
+  FutureOr<void> build() {
     _repository = ref.read(postRepository);
-
-    return _repository.getPosts();
   }
 
   Future<void> uploadPost({
@@ -26,7 +27,10 @@ class PostViewModel extends StreamNotifier<List<PostModel>> {
   }) async {
     state = AsyncValue.loading();
 
-    final uid = ref.read(authRepository).user!.uid;
+    final user = await ref.read(userRepository).getCurrentUser();
+    final uid = user!.uid;
+    final name = user.name;
+
     final uploadState = ref.read(postUploadProvider);
 
     state = await AsyncValue.guard(() async {
@@ -52,6 +56,7 @@ class PostViewModel extends StreamNotifier<List<PostModel>> {
       var post = PostModel(
         id: postId,
         uid: uid,
+        name: name,
         title: data["title"]!,
         mood: uploadState.mood!,
         content: data["content"],
@@ -61,8 +66,6 @@ class PostViewModel extends StreamNotifier<List<PostModel>> {
         createdAt: Timestamp.fromDate(uploadState.createdAt),
       );
       await _repository.createPost(post);
-
-      return [post];
     });
 
     if (!context.mounted) return;
@@ -71,6 +74,35 @@ class PostViewModel extends StreamNotifier<List<PostModel>> {
     } else {
       ref.read(postUploadProvider.notifier).resetAll();
       context.pop();
+    }
+  }
+
+  Future<void> uploadComment({
+    required BuildContext context,
+    required Map<String, dynamic> data,
+  }) async {
+    state = AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(postRepository);
+
+      final uid = ref.read(authRepository).user!.uid;
+      final user = await ref.read(userRepository).getCurrentUser();
+
+      var comment = CommentModel(
+        postId: data["postId"],
+        postUid: data["postUid"],
+        uid: uid,
+        name: user!.name,
+        content: data["content"],
+        createdAt: Timestamp.now(),
+      );
+      await repository.createComment(comment);
+    });
+
+    if (!context.mounted) return;
+    if (state.hasError) {
+      showFirebaseErrorSnack(context, state.error);
     }
   }
 }
@@ -162,7 +194,7 @@ class PostUploadViewModel extends StateNotifier<PostUploadState> {
   }
 }
 
-final postProvider = StreamNotifierProvider<PostViewModel, List<PostModel>>(
+final postProvider = AsyncNotifierProvider<PostViewModel, void>(
   () => PostViewModel(),
 );
 
