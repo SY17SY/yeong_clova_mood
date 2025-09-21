@@ -103,6 +103,8 @@ class PostViewModel extends AsyncNotifier<void> {
     if (!context.mounted) return;
     if (state.hasError) {
       showFirebaseErrorSnack(context, state.error);
+    } else {
+      FocusScope.of(context).unfocus();
     }
   }
 }

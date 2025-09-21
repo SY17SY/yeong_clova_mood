@@ -85,6 +85,7 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
       "postUid": widget.post.uid,
       "content": _comment,
     };
+    _commentController.clear();
     await ref.read(postProvider.notifier).uploadComment(
           context: context,
           data: data,
@@ -178,7 +179,10 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
                               if (widget.post.content != null &&
                                   widget.post.content!.isNotEmpty) ...[
                                 Gaps.v12,
-                                TbodyMedium16(widget.post.content!),
+                                TbodyMedium16(
+                                  widget.post.content!,
+                                  maxLines: null,
+                                ),
                               ],
                               if (widget.post.thumbUrl != null &&
                                   widget.post.thumbUrl!.isNotEmpty) ...[
